@@ -17,7 +17,7 @@ class MockCvPilot:
     def __init__(self, pid, cfg):
         self.pid_st = pid
         self.overlay_image = cfg.OVERLAY_IMAGE
-        self.steering = 0
+        self.steering = -50
         self.throttle = 0
         self.counter = 0
 
