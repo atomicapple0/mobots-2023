@@ -3,3 +3,6 @@
 *.pyc
 **/logs/**
 *.jpg
+*.catalog
+*.catalog_manifest
+*.pyc

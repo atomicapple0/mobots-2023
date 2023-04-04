@@ -56,7 +56,7 @@
 # #
 # # SSD1306_128_32
 # #
-USE_SSD1306_128_32 = True    # Enable the SSD_1306 OLED Display
+USE_SSD1306_128_32 = False    # Enable the SSD_1306 OLED Display
 SSD1306_128_32_I2C_ROTATION = 0 # 0 = text is right-side up, 1 = rotated 90 degrees clockwise, 2 = 180 degrees (flipped), 3 = 270 degrees
 SSD1306_RESOLUTION = 1 # 1 = 128x32; 2 = 128x64
 # 
@@ -553,11 +553,11 @@ PIGPIO_JITTER = 0.025   # threshold below which no signal is reported
 # # computer vision template
 # #
 # # configure which part is used as the autopilot - change to use your own autopilot
-# CV_CONTROLLER_MODULE = "donkeycar.parts.line_follower"
-# CV_CONTROLLER_CLASS = "LineFollower"
-# CV_CONTROLLER_INPUTS = ['cam/image_array']
-# CV_CONTROLLER_OUTPUTS = ['pilot/steering', 'pilot/throttle', 'cv/image_array']
-# CV_CONTROLLER_CONDITION = "run_pilot"
+CV_CONTROLLER_MODULE = "my_cv_pilot"
+CV_CONTROLLER_CLASS = "MockCvPilot"
+CV_CONTROLLER_INPUTS = ['cam/image_array']
+CV_CONTROLLER_OUTPUTS = ['pilot/steering', 'pilot/throttle', 'cv/image_array']
+CV_CONTROLLER_CONDITION = "run_pilot"
 # 
 # # LineFollower - line color and detection area
 # SCAN_Y = 100          # num pixels from the top to start horiz scan
