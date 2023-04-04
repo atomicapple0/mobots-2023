@@ -40,10 +40,10 @@
 # PCA9685_I2C_ADDR = 0x40     #I2C address, use i2cdetect to validate this number
 # PCA9685_I2C_BUSNUM = None   #None will auto detect, which is fine on the pi. But other platforms should specify the bus num.
 # 
-# #SSD1306_128_32
-# USE_SSD1306_128_32 = False    # Enable the SSD_1306 OLED Display
-# SSD1306_128_32_I2C_ROTATION = 0 # 0 = text is right-side up, 1 = rotated 90 degrees clockwise, 2 = 180 degrees (flipped), 3 = 270 degrees
-# SSD1306_RESOLUTION = 1 # 1 = 128x32; 2 = 128x64
+#SSD1306_128_32
+USE_SSD1306_128_32 = True    # Enable the SSD_1306 OLED Display
+SSD1306_128_32_I2C_ROTATION = 0 # 0 = text is right-side up, 1 = rotated 90 degrees clockwise, 2 = 180 degrees (flipped), 3 = 270 degrees
+SSD1306_RESOLUTION = 1 # 1 = 128x32; 2 = 128x64
 # 
 # #
 # # DRIVE_TRAIN_TYPE
@@ -66,7 +66,7 @@
 # # (deprecated) "PIGPIO_PWM" uses Raspberrys internal PWM
 # # (deprecated) "I2C_SERVO" uses PCA9685 servo controller to control a steering servo and an ESC, as in a standard RC car
 # #
-# DRIVE_TRAIN_TYPE = "PWM_STEERING_THROTTLE"
+DRIVE_TRAIN_TYPE = "PWM_STEERING_THROTTLE"
 # 
 # #
 # # PWM_STEERING_THROTTLE
@@ -75,19 +75,19 @@
 # # Uses a PwmPin for steering (servo) and a second PwmPin for throttle (ESC)
 # # Base PWM Frequence is presumed to be 60hz; use PWM_xxxx_SCALE to adjust pulse with for non-standard PWM frequencies
 # #
-# PWM_STEERING_THROTTLE = {
-#     "PWM_STEERING_PIN": "PCA9685.1:40.1",   # PWM output pin for steering servo
-#     "PWM_STEERING_SCALE": 1.0,              # used to compensate for PWM frequency differents from 60hz; NOT for adjusting steering range
-#     "PWM_STEERING_INVERTED": False,         # True if hardware requires an inverted PWM pulse
-#     "PWM_THROTTLE_PIN": "PCA9685.1:40.0",   # PWM output pin for ESC
-#     "PWM_THROTTLE_SCALE": 1.0,              # used to compensate for PWM frequence differences from 60hz; NOT for increasing/limiting speed
-#     "PWM_THROTTLE_INVERTED": False,         # True if hardware requires an inverted PWM pulse
-#     "STEERING_LEFT_PWM": 460,               #pwm value for full left steering
-#     "STEERING_RIGHT_PWM": 290,              #pwm value for full right steering
-#     "THROTTLE_FORWARD_PWM": 500,            #pwm value for max forward throttle
-#     "THROTTLE_STOPPED_PWM": 370,            #pwm value for no movement
-#     "THROTTLE_REVERSE_PWM": 220,            #pwm value for max reverse throttle
-# }
+PWM_STEERING_THROTTLE = {
+    "PWM_STEERING_PIN": "PIGPIO.BCM.13",   # PWM output pin for steering servo
+    "PWM_STEERING_SCALE": 1.0,              # used to compensate for PWM frequency differents from 60hz; NOT for adjusting steering range
+    "PWM_STEERING_INVERTED": False,         # True if hardware requires an inverted PWM pulse
+    "PWM_THROTTLE_PIN": "PIGPIO.BCM.18",   # PWM output pin for ESC
+    "PWM_THROTTLE_SCALE": 1.0,              # used to compensate for PWM frequence differences from 60hz; NOT for increasing/limiting speed
+    "PWM_THROTTLE_INVERTED": False,         # True if hardware requires an inverted PWM pulse
+    "STEERING_LEFT_PWM": 485,               #pwm value for full left steering
+    "STEERING_RIGHT_PWM": 190,              #pwm value for full right steering
+    "THROTTLE_FORWARD_PWM": 380,            #pwm value for max forward throttle
+    "THROTTLE_STOPPED_PWM": 300,            #pwm value for no movement
+    "THROTTLE_REVERSE_PWM": 220,            #pwm value for max reverse throttle
+}
 # 
 # #
 # # I2C_SERVO (deprecated in favor of PWM_STEERING_THROTTLE)
@@ -552,12 +552,12 @@
 # WEB_CONTROL_PORT = int(os.getenv("WEB_CONTROL_PORT", 8887))  # which port to listen on when making a web controller
 # WEB_INIT_MODE = "user"              # which control mode to start in. one of user|local_angle|local. Setting local will start in ai mode.
 # 
-# #JOYSTICK
-# USE_JOYSTICK_AS_DEFAULT = False      #when starting the manage.py, when True, will not require a --js option to use the joystick
+#JOYSTICK
+USE_JOYSTICK_AS_DEFAULT = True      #when starting the manage.py, when True, will not require a --js option to use the joystick
 # JOYSTICK_MAX_THROTTLE = 0.5         #this scalar is multiplied with the -1 to 1 throttle value to limit the maximum throttle. This can help if you drop the controller or just don't need the full speed available.
 # JOYSTICK_STEERING_SCALE = 1.0       #some people want a steering that is less sensitve. This scalar is multiplied with the steering -1 to 1. It can be negative to reverse dir.
 # AUTO_RECORD_ON_THROTTLE = True      #if true, we will record whenever throttle is not zero. if false, you must manually toggle recording with some other trigger. Usually circle button on joystick.
-# CONTROLLER_TYPE = 'xbox'            #(ps3|ps4|xbox|pigpio_rc|nimbus|wiiu|F710|rc3|MM1|custom) custom will run the my_joystick.py controller written by the `donkey createjs` command
+CONTROLLER_TYPE = 'pigpio_rc'            #(ps3|ps4|xbox|pigpio_rc|nimbus|wiiu|F710|rc3|MM1|custom) custom will run the my_joystick.py controller written by the `donkey createjs` command
 # USE_NETWORKED_JS = False            #should we listen for remote joystick control over the network?
 # NETWORK_JS_SERVER_IP = None         #when listening for network joystick control, which ip is serving this information
 # JOYSTICK_DEADZONE = 0.01            # when non zero, this is the smallest throttle before recording triggered.
@@ -582,17 +582,17 @@
 # #SOMBRERO
 # HAVE_SOMBRERO = False           #set to true when using the sombrero hat from the Donkeycar store. This will enable pwm on the hat.
 # 
-# #PIGPIO RC control
-# STEERING_RC_GPIO = 26
-# THROTTLE_RC_GPIO = 20
-# DATA_WIPER_RC_GPIO = 19
-# PIGPIO_STEERING_MID = 1500         # Adjust this value if your car cannot run in a straight line
-# PIGPIO_MAX_FORWARD = 2000          # Max throttle to go fowrward. The bigger the faster
-# PIGPIO_STOPPED_PWM = 1500
-# PIGPIO_MAX_REVERSE = 1000          # Max throttle to go reverse. The smaller the faster
-# PIGPIO_SHOW_STEERING_VALUE = False
-# PIGPIO_INVERT = False
-# PIGPIO_JITTER = 0.025   # threshold below which no signal is reported
+#PIGPIO RC control
+STEERING_RC_GPIO = 26
+THROTTLE_RC_GPIO = 20
+DATA_WIPER_RC_GPIO = 19
+PIGPIO_STEERING_MID = 1500         # Adjust this value if your car cannot run in a straight line
+PIGPIO_MAX_FORWARD = 2000          # Max throttle to go fowrward. The bigger the faster
+PIGPIO_STOPPED_PWM = 1500
+PIGPIO_MAX_REVERSE = 1000          # Max throttle to go reverse. The smaller the faster
+PIGPIO_SHOW_STEERING_VALUE = False
+PIGPIO_INVERT = False
+PIGPIO_JITTER = 0.025   # threshold below which no signal is reported
 # 
 # 
 # 
