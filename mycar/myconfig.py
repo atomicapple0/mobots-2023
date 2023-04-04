@@ -751,5 +751,5 @@ PIGPIO_JITTER = 0.025   # threshold below which no signal is reported
 # STOP_SIGN_REVERSE_THROTTLE = -0.5     # Throttle during reversing when detected a stop sign
 # 
 # # FPS counter
-# SHOW_FPS = False
+SHOW_FPS = True
 # FPS_DEBUG_INTERVAL = 10    # the interval in seconds for printing the frequency info into the shell
