@@ -4,6 +4,7 @@
 **/logs/**
 *.jpg
 !imgs/*
+!checkerboard/*
 *.catalog
 *.catalog_manifest
 *.pyc
