@@ -1,59 +1,49 @@
 import cv2
 import numpy as np
-from simple_pid import PID
 import logging
 
 logger = logging.getLogger(__name__)
 
+class BasicController:
+    def __init__(self):
+        self.k_p = 1
+    
+    # given offset from centerline, return steering and throttle
+    def calculate_cmd(self, offset):
+        steering = -self.k_p * offset
+        throttle = .1 if abs(steering) < .1 else .05
+        return steering, throttle
+
 
 class MockCvPilot:
-    '''
-    OpenCV based MOCK controller; just draws a counter and 
-    returns 0 for thottle and steering.
-
-    :param pid: a PID controller that can be used to estimate steering and/or throttle
-    :param cfg: the vehicle configuration properties
-    '''
     def __init__(self, pid, cfg):
         self.pid_st = pid
         self.overlay_image = cfg.OVERLAY_IMAGE
-        self.steering = -50
+        self.steering = 0
         self.throttle = 0
         self.counter = 0
+        self.offset = 0
 
 
     def run(self, cam_img):
-        '''
-        main runloop of the CV controller.
-
-        :param cam_img: the camerate image, an RGB numpy array
-        :return: tuple of steering, throttle, and the telemetry image.
-
-        If overlay_image is True, then the output image
-        includes an overlay that shows how the 
-        algorithm is working; otherwise the image
-        is just passed-through untouched. 
-        '''
         if cam_img is None:
             return 0, 0, None
 
         self.counter += 1
 
-        # show some diagnostics
+        # run segmentation
         if self.overlay_image:
-            # draw onto a COPY of the image so we don't alter the original
-            cam_img = self.overlay_display(np.copy(cam_img))
+            cam_img, self.offset = self.compute_offset(cam_img)
+            cam_img = self.annotate_img(cam_img)
+
+        # run controller
+        self.steering, self.throttle = self.cntrl.calculate_cmd(self.offset)
 
         return self.steering, self.throttle, cam_img
 
-    def overlay_display(self, img):
-        '''
-        draw on top the given image.
-        show some values we are using for control
+    def annotate_img(self, img):
+        img = np.copy(img)
 
-        :param img: the image to draw on as a numpy array
-        :return: the image with overlay drawn
-        '''
         # some text to show on the overlay
         display_str = []
         display_str.append(f"STEERING:{self.steering:.1f}")
@@ -70,3 +60,6 @@ class MockCvPilot:
             y += lineheight
 
         return img
+
+    def compute_offset(self, img):
+        
