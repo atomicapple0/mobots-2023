@@ -1,5 +1,5 @@
 *.json
-*.ini
+**.ini
 *.pyc
 **/logs/**
 *.jpg
