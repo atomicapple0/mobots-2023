@@ -77,8 +77,8 @@ def process_img(img, filename = None):
     warped = cv2.warpPerspective(cloned_img, M, (600//10, 1000//10), flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT, borderValue=GREEN)
     out_of_bounds = warped[:,:] == GREEN
 
-    if filename:
-        save_img(WARPED_DIR + filename, assemble_imgs([img, np.flipud(warped)]))
+    # if filename:
+    #     save_img(WARPED_DIR + filename, assemble_imgs([img, np.flipud(warped)]))
 
     # threshold in yuv space
     yuv = threshold(warped)
@@ -99,14 +99,14 @@ def process_img(img, filename = None):
 
     conv[out_of_bounds] = 0
 
-    if filename:
-        save_img(TOPHAT_DIR + filename, (conv * 255).astype('uint8'))
+    # if filename:
+    #     save_img(TOPHAT_DIR + filename, (conv * 255).astype('uint8'))
 
     # relu out negative response from kernel
     relud = relu(conv, 0)
 
-    if filename:
-        save_img(RELUD_DIR + filename, (relud * 255).astype('uint8'))
+    # if filename:
+    #     save_img(RELUD_DIR + filename, (relud * 255).astype('uint8'))
 
     # depending on bias eliminate left or right pixels
     bias = BIASES[CURR_BIAS_IDX]
@@ -176,7 +176,7 @@ def process_img(img, filename = None):
     # height = int(img.shape[0] / relud.shape[0] * relud.shape[1])
     # relud_flipped = np.flipud(relud)
     # relud_three_channel = (np.stack((relud_flipped,)*3, axis=-1) * 255).astype('uint8')
-    # log(f"avg col is {avg_col} of {relud.shape[1]}")
+    # print(f"avg col is {avg_col} of {relud.shape[1]}")
     # relud_three_channel[:,avg_col] = (255,255,0)
     # relud_big = cv2.resize(relud_three_channel, dsize=(height,img.shape[0]), interpolation=cv2.INTER_NEAREST)
 

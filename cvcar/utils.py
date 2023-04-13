@@ -4,7 +4,7 @@ from my_cv_pilot import *
 from matplotlib import pyplot as plt
 
 def log(s):
-    if True:
+    if False:
         print(s)
 
 def save_img(filename, img):
