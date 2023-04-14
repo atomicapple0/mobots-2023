@@ -56,7 +56,7 @@ def process_img(img, filename = None):
     src = [(int(resize*x), int(resize*y)) for (x,y) in src]
     dst = [(10, 34), (-10, 34), (-10, 0), (10, 0)]
     dst = [(int(10*(x + 30)), int(10*y)) for (x,y) in dst]
-    dst = [(int(x//10), int(y//10)) for (x,y) in dst]
+    dst = [(int(x//10*3), int(y//10*3)) for (x,y) in dst]
 
     src_np = np.array(src, dtype=np.float32)
     dst_np = np.array(dst, dtype=np.float32)
@@ -74,7 +74,7 @@ def process_img(img, filename = None):
     M = cv2.getPerspectiveTransform(src_np, dst_np)
     # cloned_img = np.array(img)
     cloned_img = img
-    warped = cv2.warpPerspective(cloned_img, M, (600//10, 1000//10), flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT, borderValue=GREEN)
+    warped = cv2.warpPerspective(cloned_img, M, (600//10*3, 1000//10*3), flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT, borderValue=GREEN)
     out_of_bounds = warped[:,:] == GREEN
 
     if filename:
@@ -164,7 +164,7 @@ def process_img(img, filename = None):
     avg_col = int(np.mean(col_center_by_rows))
     
     abs_pct_offset = avg_col / relud.shape[1]
-    offset_from_center = (avg_col-centerline) / relud.shape[1] / 2
+    offset_from_center = abs_pct_offset - .5
 
     steering = offset_from_center * 100
     throttle = 0
@@ -184,26 +184,25 @@ def process_img(img, filename = None):
     avg_col_warped = int(abs_pct_offset * warped.shape[1])
     log(f"avg col is {avg_col} of {relud.shape[1]}")
     print(f"avg col is {avg_col_warped} of {warped.shape[1]}")
-    for c in range(avg_col_warped - 1, avg_col_warped + 1):
-        if c < 0 or c >= warped.shape[1]:
-            continue
-        warped[:,c] = GREEN
+    
     
     # dims are 100 x 20
     # horizontal no look further bar
     warped[20,:] = MAGENTA
     # vertical left right bars
-    warped[:,2*left_off] = MAGENTA
-    warped[:,2*right_off] = MAGENTA
+    warped[:,left_off * warped.shape[1] //30] = MAGENTA
+    warped[:,right_off *warped.shape[1] // 30] = MAGENTA
     # vertical centerline bar
-    warped[:10,30] = MAGENTA
+    warped[:10,warped.shape[1]//2] = MAGENTA
     # left right bias circle
-    warped[90:100,5:10] = MAGENTA if bias == LEFT else GREEN
+    warped[-15:-5,5:10] = MAGENTA if bias == LEFT else GREEN
     # looking for split line
     split = max(0,LOOK_FOR_SPLIT)
     split = min(50,split)
     log(f"split is {split} and {LOOK_FOR_SPLIT}")
-    warped[99,:split] = CYAN_OR_YELLOW
+    warped[-2,:split] = CYAN_OR_YELLOW
+
+    warped[:,avg_col_warped] = GREEN
 
     # log(relud_big.shape)
     # plt.imshow(relud)

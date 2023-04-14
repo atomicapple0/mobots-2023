@@ -10,7 +10,7 @@ def threshold(img):
 
     # threshold in yuv space
     yuv = yuv[:,:,0] / 255.0
-    yuv = relu(yuv, .7)
+    yuv = yuv > .7
 
     # hmmm
     # yuv2 = cv2.cvtColor(img, cv2.COLOR_BGR2YUV)

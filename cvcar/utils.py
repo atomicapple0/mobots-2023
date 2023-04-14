@@ -3,6 +3,14 @@ import numpy as np
 from my_cv_pilot import *
 from matplotlib import pyplot as plt
 
+def resizer(img):
+    h,w,z = img.shape
+    crop = img[int(.85*h):int(1*h),int(.3*w):int(.7*w),:]
+    # resize to (320, 240)
+    res = cv2.resize(crop, (320, 240))
+    print(f"img shape {img.shape}, crop.shape {crop.shape}, res.shape {res.shape}")
+    return res
+
 def log(s):
     if True:
         print(s)
