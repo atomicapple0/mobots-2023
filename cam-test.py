@@ -7,4 +7,9 @@ camera.start_preview()
 
 sleep(2)
 
-camera.capture('foo.jpg')
+filename = 'cvcar/imgs/misc/yay.jpg'
+camera.capture(filename)
+
+print(f"saved {filename}")
+
+camera.close()

@@ -3,7 +3,8 @@
 *.pyc
 **/logs/**
 *.jpg
-!imgs/*
+!imgs/input/*
+!imgs/misc/*
 !checkerboard/*
 *.catalog
 *.catalog_manifest

@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import logging
 from cv import *
+from threshold import *
 
 class MockCvPilot:
     def __init__(self, pid, cfg):
@@ -11,9 +12,11 @@ class MockCvPilot:
         if cam_img is None:
             return 0, 0, None
 
-        cam_img, steering, throttle = self.process_img(cam_img)
+        steering, throttle = 0, 0
+        # img, steering, throttle = process_img(cam_img)
+        img = threshold(cam_img)
 
-        return steering, throttle, cam_img
+        return steering, throttle, img
 
 
 
