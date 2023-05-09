@@ -27,7 +27,7 @@ def flip_stack_unfloat(img):
     return np.flipud(np.stack((img,)*3, axis=-1) * 255).astype('uint8')
 
 def relu(img, thresh):
-    assert img.dtype == np.float64
+    assert img.dtype == np.float32
     diff = img - thresh
     relud = (diff * (diff > 0))
     return relud + thresh
