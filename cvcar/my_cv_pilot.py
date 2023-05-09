@@ -6,7 +6,10 @@ from detect_line import detect_line
 from pid import pid
 from threshold import *
 from time import time, sleep
+<<<<<<< HEAD
 from new_cv import *
+=======
+>>>>>>> 4322ae29c5e32a1748557a39cf696c2702281361
 
 class MockCvPilot:
     def __init__(self, pid, cfg):
@@ -38,9 +41,11 @@ class MockCvPilot:
         # old cv code
         processed, blobs = new_cv(img)
         pid(blobs)
+        img = (threshold(cam_img) * 255).astype('uint8')
 
         end = time()
-        print(f"done in {end-start} sec")
+        # print(f"done in {end-start} sec")
+        sleep(.01)
 
         return self.steering, self.throttle, img
 
