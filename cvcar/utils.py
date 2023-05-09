@@ -12,7 +12,7 @@ def resizer(img):
     return res
 
 def log(s):
-    if True:
+    if False:
         print(s)
 
 def save_img(filename, img):
