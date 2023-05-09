@@ -82,85 +82,116 @@ def process_img(img, filename = None):
 
     # threshold in yuv space
     yuv = threshold(warped)
+    relud = yuv
 
     # if filename:
     #     save_img(THRESHOLDED_DIR + filename, (yuv * 255).astype('uint8'))
 
     # resize image to (30,50), then crop to (30,10)
-    resized = cv2.resize(yuv, (30,50), interpolation = cv2.INTER_AREA)
-    resized = resized[:10,:]
+    # resized = cv2.resize(yuv, (30,50), interpolation = cv2.INTER_AREA)
+    # resized = resized[:20,:]
 
-    out_of_bounds = cv2.resize(out_of_bounds.astype("uint8"), (30,50), interpolation = cv2.INTER_NEAREST)
-    out_of_bounds = out_of_bounds[:10,:]
+    # out_of_bounds = cv2.resize(out_of_bounds.astype("uint8"), (30,50), interpolation = cv2.INTER_NEAREST)
+    # out_of_bounds = out_of_bounds[:10,:]
 
-    # tophat convolve
-    tophat = np.array([-1, -1, 2, 2, -1, -1])
-    conv = cv2.filter2D(src=resized, ddepth=-1, kernel=tophat)
+    # # tophat convolve
+    # tophat = np.array([-1, -1, 2, 2, -1, -1])
+    # conv = cv2.filter2D(src=resized, ddepth=-1, kernel=tophat)
 
-    conv[out_of_bounds] = 0
+    # conv[out_of_bounds] = 0
 
     # if filename:
     #     save_img(TOPHAT_DIR + filename, (conv * 255).astype('uint8'))
 
-    # relu out negative response from kernel
-    relud = relu(conv, 0)
+    # # relu out negative response from kernel
+    # relud = relu(conv, 0)
 
     # if filename:
     #     save_img(RELUD_DIR + filename, (relud * 255).astype('uint8'))
 
-    # depending on bias eliminate left or right pixels
-    bias = BIASES[CURR_BIAS_IDX]
+    # # depending on bias eliminate left or right pixels
+    # bias = BIASES[CURR_BIAS_IDX]
 
-    def is_peak(img, r, c):
-        if c == 0 or c == img.shape[1] - 1:
-            return False
-        return img[r,c] > .08 and img[r,c-1] < .9*img[r,c] and img[r,c+1] < .9*img[r,c]
+    # def is_peak(img, r, c):
+    #     if c == 0 or c == img.shape[1] - 1:
+    #         return False
+    #     return img[r,c] > .08 and img[r,c-1] < .9*img[r,c] and img[r,c+1] < .9*img[r,c]
 
-    left_off = LEFT_30 + BIAS_LEFT_RIGHT_DIFF if bias == RIGHT else LEFT_30
-    right_off = RIGHT_30 - BIAS_LEFT_RIGHT_DIFF if bias == LEFT else RIGHT_30
-    col_iter = list(range(left_off,right_off))
-    # if robot is biased to the left
-    if bias == LEFT:
-        # iterate from left to right
-        pass
-    else:
-        # iterate from left to right
-        col_iter = [relud.shape[1] - c - 1 for c in col_iter]
+    # left_off = LEFT_30 + BIAS_LEFT_RIGHT_DIFF if bias == RIGHT else LEFT_30
+    # right_off = RIGHT_30 - BIAS_LEFT_RIGHT_DIFF if bias == LEFT else RIGHT_30
+    # col_iter = list(range(left_off,right_off))
+    # # if robot is biased to the left
+    # if bias == LEFT:
+    #     # iterate from left to right
+    #     pass
+    # else:
+    #     # iterate from left to right
+    #     col_iter = [relud.shape[1] - c - 1 for c in col_iter]
     
-    centerline = relud.shape[1] / 2
-    col_center_by_rows = []
-    num_is_peaked = 0
+    # centerline = relud.shape[1] / 2
+    # col_center_by_rows = []
+    # num_is_peaked = 0
     # iterate through the rows
-    for r in range(relud.shape[0]):
-        # have we found a peak corresponding to a lane
-        is_peaked = 0
-        col_center_by_row = 0
-        col_weights_by_row = 0
+    # for r in range(relud.shape[0]):
+    #     # have we found a peak corresponding to a lane
+    #     is_peaked = 0
+    #     col_center_by_row = 0
+    #     col_weights_by_row = 0
 
-        for c in col_iter:
-            if is_peaked:
-                is_peaked += 1
-            if is_peak(relud,r,c):
-                log(f"found first peak on col {r} in row {c}")
-                is_peaked += 1
-            if is_peaked > 3:
-                relud[r,c] = 0
-            col_center_by_row += relud[r,c] * c
-            col_weights_by_row += relud[r,c]
-        log(f"{col_center_by_row}")
-        log(f"{col_weights_by_row}")
-        col_center = col_center_by_row / col_weights_by_row
-        # if col_center is NaN, then set to middle
-        if math.isnan(col_center):
-            col_center = centerline
-        col_center_by_rows.append(col_center)
-        if is_peaked:
-            num_is_peaked += 1
+    #     for c in col_iter:
+    #         if is_peaked:
+    #             is_peaked += 1
+    #         if is_peak(relud,r,c):
+    #             log(f"found first peak on col {r} in row {c}")
+    #             is_peaked += 1
+    #         if is_peaked > 3:
+    #             relud[r,c] = 0
+    #         col_center_by_row += relud[r,c] * c
+    #         col_weights_by_row += relud[r,c]
+    #     log(f"{col_center_by_row}")
+    #     log(f"{col_weights_by_row}")
+    #     col_center = col_center_by_row / col_weights_by_row
+    #     # if col_center is NaN, then set to middle
+    #     if math.isnan(col_center):
+    #         col_center = centerline
+    #     col_center_by_rows.append(col_center)
+    #     if is_peaked:
+    #         num_is_peaked += 1
     
-    if LOOK_FOR_SPLIT <= 0 and num_is_peaked > 3:
-        CURR_BIAS_IDX += 1
-        LOOK_FOR_SPLIT = 100
+    # if LOOK_FOR_SPLIT <= 0 and num_is_peaked > 3:
+    #     CURR_BIAS_IDX += 1
+    #     LOOK_FOR_SPLIT = 100
+
     
+    # fit a quadratic
+    crop = relud[:100,:]
+    flattened = crop.reshape(-1)
+    indices = list(np.ndindex(crop.shape[:]))
+    pts = np.c_[indices, flattened]
+
+    coeffs = np.polyfit(x=pts[:,0],y=pts[:,1],w=pts[:,2], deg=2)
+    poly = np.poly1d(coeffs)
+
+    yp = np.linspace(0,100,100) # 100 pts between (0,30)
+    xp = poly(yp)
+
+    curve = np.column_stack((xp.astype(np.int32), yp.astype(np.int32)))
+    relud = np.stack((relud, relud, relud), axis=-1).astype(np.float32)
+    cv2.polylines(relud, [curve], False, (1.0,0,1.0), thickness=2)
+    cv2.polylines(warped, [curve], False, (0,255,255), thickness=2)
+
+    # compute curvilinear position and curvature at 0
+    # self.offset = poly(0)
+    a,b,c = coeffs
+    # self.curv = (1 + b ** 2) ** 1.5 / abs(2*a)
+
+    plt.imshow(crop, origin='lower')
+    plt.show()
+    plt.imshow(relud, origin='lower')
+    plt.show()
+    plt.imshow(warped, origin='lower')
+    plt.show()
+        
     avg_col = int(np.mean(col_center_by_rows))
     
     abs_pct_offset = avg_col / relud.shape[1]

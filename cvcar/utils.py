@@ -8,7 +8,7 @@ def resizer(img):
     crop = img[int(.85*h):int(1*h),int(.3*w):int(.7*w),:]
     # resize to (320, 240)
     res = cv2.resize(crop, (320, 240))
-    print(f"img shape {img.shape}, crop.shape {crop.shape}, res.shape {res.shape}")
+    # print(f"img shape {img.shape}, crop.shape {crop.shape}, res.shape {res.shape}")
     return res
 
 def log(s):
@@ -27,7 +27,7 @@ def flip_stack_unfloat(img):
     return np.flipud(np.stack((img,)*3, axis=-1) * 255).astype('uint8')
 
 def relu(img, thresh):
-    assert img.dtype == np.float64
+    assert img.dtype == np.float32
     diff = img - thresh
     relud = (diff * (diff > 0))
     return relud + thresh

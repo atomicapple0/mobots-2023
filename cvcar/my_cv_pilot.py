@@ -25,7 +25,7 @@ class MockCvPilot:
     
     def send_w_v(self, w, v):
         self.steering = w
-        self.throttle = v
+        # self.throttle = v
     
     def time(self):
         return self.elapsed
@@ -39,15 +39,14 @@ class MockCvPilot:
         # img, steering, throttle = process_img(cam_img)
 
         # old cv code
-        processed, blobs = new_cv(img)
-        pid(blobs)
-        img = (threshold(cam_img) * 255).astype('uint8')
+        processed, blobs = new_cv(cam_img)
+        pid(self,blobs)
 
         end = time()
-        # print(f"done in {end-start} sec")
-        sleep(.01)
-
-        return self.steering, self.throttle, img
+        self.steering /= 10
+        print(f"done s:{self.steering:.2f} t{self.throttle:.2f} in {end-start:.2f} sec")
+        
+        return -self.steering, self.throttle, processed
 
 
 
