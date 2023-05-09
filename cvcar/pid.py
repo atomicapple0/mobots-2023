@@ -92,7 +92,7 @@ def pid(R,blobs):
             V, W = 0, 0
 
     OPEN_TO_CHANGING_PREFERENCE -= 1
-    print(f'[{FORK_NUM}->{TURNS[FORK_NUM]}]\tERR=[{p_err:.02f},{d_err:.02f},{i_err:.02f}]\tVW=[{V:.02f},{W:.02f}]\time={R.tine()}')
+    print(f'[{FORK_NUM}->{TURNS[FORK_NUM]}]\tERR=[{p_err:.02f},{d_err:.02f},{i_err:.02f}]\tVW=[{V:.02f},{W:.02f}]\ttime={R.time()}')
 
     R.send_w_v(W, V)
     R.step()
