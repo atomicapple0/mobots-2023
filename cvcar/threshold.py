@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 from utils import *
 import os
+from matplotlib import pyplot as plt
 
 def threshold(img):
     # ksize
@@ -16,15 +17,18 @@ def threshold(img):
     # threshold in yuv space
     # plt.imshow(yuv[:,:,0]); plt.show()
     # plt.imshow(yuv[:,:,1]); plt.show()
-    hmm = 255-yuv[:,:,1]
-    yuv = hmm / 255.0
-    yuv = yuv > .75
+    # hmm = 255-yuv[:,:,1]
+    # yuv = hmm / 255.0
+    # yuv = yuv > .65
     
     # hmmm
-    # yuv2 = cv2.cvtColor(img, cv2.COLOR_BGR2YUV)
-    # yuv2 = yuv[:,:,2] / 255.0
-    # yuv2 = relu(1-yuv, .7)
-    # return yuv2
+    yuv2 = cv2.cvtColor(img, cv2.COLOR_BGR2YUV)
+    # plt.imshow(yuv[:,:,0]); plt.show()
+    # plt.imshow(yuv[:,:,1]); plt.show()
+    # plt.imshow(yuv[:,:,2]); plt.show()
+    yuv2 = yuv[:,:,2] / 255.0
+    yuv2 = relu(1-yuv, .7)
+    return yuv2
 
     return yuv.astype('float32')
 

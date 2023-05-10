@@ -3,6 +3,7 @@ import numpy as np
 from detect_line import CENTER_COL
 from time import time, sleep
 from detect_line import detect_line
+from threshold import threshold
 
 def resizer(img):
     h,w,z = img.shape
@@ -18,11 +19,7 @@ class MockCvPilot:
         self.throttle = 0
         self.init_time = time()
         self.elapsed = 0
-        self.errs = []
-        pass
-    
-    def time(self):
-        return self.elapsed
+        self.errs = [0]
     
     def run(self, cam_img):
         if cam_img is None:
@@ -31,12 +28,11 @@ class MockCvPilot:
         start = time()
 
         img = resizer(cam_img)
+
         processed, blobs = detect_line(img)
+
         if blobs:
             blob = blobs[0]
-        else:
-            self.steering = self.steering
-            self.throttle = self.throttle
             err = CENTER_COL - blob.center
             self.errs.append(err)
 
@@ -49,6 +45,8 @@ class MockCvPilot:
             k_i = 0 / 100
             k_d = 12  / 100
             self.steering = k_p * p_err + k_d * d_err + k_i * i_err
+        
+        self.throttle = 0
 
         end = time()
         sleep(.001)
