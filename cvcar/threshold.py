@@ -26,9 +26,9 @@ def threshold(img):
     # plt.imshow(yuv[:,:,0]); plt.show()
     # plt.imshow(yuv[:,:,1]); plt.show()
     # plt.imshow(yuv[:,:,2]); plt.show()
-    yuv2 = yuv[:,:,2] / 255.0
-    yuv2 = relu(1-yuv, .7)
-    return yuv2
+    # yuv2 = yuv[:,:,0] / 255.0
+    # yuv2 = relu(1-yuv, .7)
+    return yuv2[:,:,0] > .8
 
     return yuv.astype('float32')
 
