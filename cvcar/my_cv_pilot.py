@@ -1,9 +1,16 @@
+import cv2
 import numpy as np
-from cv import *
 from detect_line import CENTER_COL
-from threshold import *
 from time import time, sleep
-from new_cv import *
+from detect_line import detect_line
+
+def resizer(img):
+    h,w,z = img.shape
+    crop = img[int(.85*h):int(1*h),int(.3*w):int(.7*w),:]
+    # resize to (320, 240)
+    res = cv2.resize(crop, (320, 240))
+    # print(f"img shape {img.shape}, crop.shape {crop.shape}, res.shape {res.shape}")
+    return res
 
 class MockCvPilot:
     def __init__(self, pid, cfg):
@@ -23,7 +30,8 @@ class MockCvPilot:
 
         start = time()
 
-        processed, blobs = new_cv(cam_img)
+        img = resizer(cam_img)
+        processed, blobs = detect_line(img)
         if blobs:
             blob = blobs[0]
         else:
