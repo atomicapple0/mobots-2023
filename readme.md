@@ -45,8 +45,7 @@ One challenge was with dealing with shadows. The manner of thresholding regions 
 <p align="center">
 <img src="./pics/prop.png" width="60%">
 </p>
-For a line follower, the only relevant state information is its position and heading with respect to the line it is trying to follow. The absolute location of the robot is pretty much unknown as well as how far along the robot is on the course. This is known is [curvilinear coordinates](https://www.a1k0n.net/2018/11/13/fast-line-following.html
-).
+For a line follower, the only relevant state information is its position and heading with respect to the line it is trying to follow. The absolute location of the robot is pretty much unknown as well as how far along the robot is on the course. This is known is [curvilinear coordinates](https://www.a1k0n.net/2018/11/13/fast-line-following.html).
 
 Rudimentary line followers (like my mobot last year), generally use basic proportional control which only look at the error between the center of the lane and the camera, ignoring heading and lane curvature entirely. Though this can work, basic proportional control struggles on sharp turns as it tends to under or overshoot.
 
@@ -57,7 +56,7 @@ Rudimentary line followers (like my mobot last year), generally use basic propor
 A better approach is to incorporate heading and lane curvature information. The is done by taking the slope and curvature of the quadratic. This allows the mobot to fare better on curves and results in a smoother ride with fewer oscillations empirically. The lane curvature term ensures that the robot is not "suprised" by turns.
 
 <p align="center">
-<img src="./pics/closed.png" width="40%">
+<img src="./pics/closed.png" width="60%">
 </p>
 This is a closed form solution that apparantly performs better that I did not use.
 
@@ -67,9 +66,11 @@ This is a closed form solution that apparantly performs better that I did not us
 </p>
 As mentioned previously, the decision points challenge tests the mobot by ensuring that it executes a predetermined sequence of turns correctly. Though I had implemented the code to do this, I have not been able to get it to work successfully as I have focused my efforts on tuning performance in the earlier section. The basic strategy is based on the realization that we can look for forks in the road (going from seeing one lane marker to two), and then switch from hugging the left lane marker to the right lane marker and vice versa. To fit a quadratic curve on the right lane marker, we can simply look for the left lane marker in each horizontal slice of the thresholded image and zero out that response, leaving just the right lane marker.
 
+# Performance
+I intended to have an IMU so I could have vitals on the each run, but I could not get it set up with the Raspi due to the hat taking up so many pins. Emperically, the robot was able to follow the line at low powers (<10%) but fails on the hilly portions of the course where it speeds out. I believe that a large part of this is due to the latency as there is a noticeable delay before the robot corrects. I have not been able to get the robot to run at higher speeds due to the latency so the performance isn't much different from my last years mobot despite the efforts. However, the build is much better made and there is a potential for better performance if the latency can be reduced.
+
 # Running Software
 After setting up and calibrating the hardware for DonkeyCar, run:
 ```
 python3 cvcar/manage.py drive
-```
 ```
