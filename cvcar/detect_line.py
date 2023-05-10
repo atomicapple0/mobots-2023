@@ -75,11 +75,11 @@ def detect_line(img):
                 max_size = sizes[i]
         if max_size > 500:
             labels.append(max_label)
-        print(max_size)
+        # print(max_size)
     except IndexError:
         pass
 
-    print(labels)
+    # print(labels)
     
     blobs = []
     for label in labels:

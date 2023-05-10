@@ -17,7 +17,6 @@ class MockCvPilot:
         self.elapsed = 0
         self.errs = []
         pass
-<<<<<<< Updated upstream
 
     def step(self):
         sleep(.001)
@@ -25,32 +24,17 @@ class MockCvPilot:
     
     def send_w_v(self, w, v):
         self.steering = w
-        self.throttle = v
+        # self.throttle = v
     
     def time(self):
         return self.elapsed
-=======
->>>>>>> Stashed changes
     
     def run(self, cam_img):
         if cam_img is None:
             return 0, 0, None
 
         start = time()
-        # img, steering, throttle = process_img(cam_img)
 
-        # old cv code
-<<<<<<< Updated upstream
-        processed, blobs = new_cv(img)
-        pid(blobs)
-        img = (threshold(cam_img) * 255).astype('uint8')
-
-        end = time()
-        # print(f"done in {end-start} sec")
-        sleep(.01)
-
-        return self.steering, self.throttle, img
-=======
         processed, blobs = new_cv(cam_img)
         if blobs:
             blob = blobs[0]
@@ -75,13 +59,3 @@ class MockCvPilot:
         print(f"done steering:{self.steering:.2f} throttle:{self.throttle:.2f} in err:{self.errs[-1]} {end-start:.2f} sec")
         
         return self.steering, self.throttle, processed
->>>>>>> Stashed changes
-
-
-
-
-
-
-
-
-
