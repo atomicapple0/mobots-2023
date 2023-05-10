@@ -12,7 +12,7 @@ def threshold(img):
     img = cv2.blur(img, ksize) 
 
     # threshold in yuv space
-    yuv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV).astype(np.float32)
+    yuv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
     # threshold in yuv space
     # plt.imshow(yuv[:,:,0]); plt.show()
@@ -20,15 +20,19 @@ def threshold(img):
     # hmm = 255-yuv[:,:,1]
     # yuv = hmm / 255.0
     # yuv = yuv > .65
+    nice = yuv[:,:,0] > 80
+    plt.imshow(nice); plt.show()
+
+    return nice
     
     # hmmm
-    yuv2 = cv2.cvtColor(img, cv2.COLOR_BGR2YUV)
+    # yuv2 = cv2.cvtColor(img, cv2.COLOR_BGR2YUV)
     # plt.imshow(yuv[:,:,0]); plt.show()
     # plt.imshow(yuv[:,:,1]); plt.show()
     # plt.imshow(yuv[:,:,2]); plt.show()
     # yuv2 = yuv[:,:,0] / 255.0
     # yuv2 = relu(1-yuv, .7)
-    return yuv2[:,:,0] > .8
+    # return yuv2[:,:,0] > .8
 
     return yuv.astype('float32')
 
