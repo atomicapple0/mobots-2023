@@ -1,10 +1,6 @@
-import cv2
 import numpy as np
-import logging
 from cv import *
-from cvcar.detect_line import CENTER_COL
-from detect_line import detect_line
-from pid import pid
+from detect_line import CENTER_COL
 from threshold import *
 from time import time, sleep
 from new_cv import *
@@ -17,14 +13,6 @@ class MockCvPilot:
         self.elapsed = 0
         self.errs = []
         pass
-
-    def step(self):
-        sleep(.001)
-        self.elapsed = time() - self.init_time
-    
-    def send_w_v(self, w, v):
-        self.steering = w
-        # self.throttle = v
     
     def time(self):
         return self.elapsed

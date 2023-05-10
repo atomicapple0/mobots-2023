@@ -1,7 +1,5 @@
 import cv2
 import numpy as np
-from my_cv_pilot import *
-from matplotlib import pyplot as plt
 
 def resizer(img):
     h,w,z = img.shape

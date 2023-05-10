@@ -5,7 +5,6 @@ import os
 
 import cv_utils
 from cv_utils import *
-from otsu import otsu
 
 cv_utils.IMSHOW_MODE = cv_utils.NO_OP
 # cv_utils.IMSHOW_MODE = cv_utils.CV2_SHOW_BLOCKING
@@ -105,14 +104,15 @@ def detect_line(img):
     out = np.hstack((img,thresh))
     return out, blobs
 
+from utils import save_img, flip_stack_unfloat
+
 if __name__ == '__main__':
-    img_idx = 0
-    fname = f'./tests/{img_idx}.png'
-    while os.path.exists(fname):
-        print(f'reading: {fname}')
-        img = cv2.imread(fname)
-        out, blobs = detect_line(img)
-        cv2_imshow(out=out)
-        cv2.imwrite(f'./results/{img_idx}.png', out)
-        img_idx += 1
-        fname = f'./tests/{img_idx}.png'
+    src_dir = "imgs/input/"
+    dest_dir = "imgs/final/"
+    jpgs = [jpg for jpg in os.listdir(src_dir) if jpg.endswith('jpg') or jpg.endswith('png')]
+    for idx,jpg in enumerate(jpgs):
+        src_file = src_dir + jpg
+        print(f'reading: {src_file}')
+        img = cv2.imread(src_file)
+        out, _ = detect_line(img)
+        save_img(dest_dir + jpg, np.flipud(flip_stack_unfloat(out)))
